@@ -27,13 +27,14 @@ func (service *AddBasicInfoService) Create() serializer.Response {
 		Phone:      service.Phone,
 		Email:      service.Email,
 		Url:        service.Url,
+		CreatedAt:  time.Now(),
 	}
 
 	// 创建基础数据
 	_, err := database.DB.Exec(`
 				REPLACE INTO basic_info(name, address, department, phone, email, url, create_at)
 			  	VALUES (?,?,?,?,?,?,?)`,
-		BasicInfo.Name, BasicInfo.Address, BasicInfo.Department, BasicInfo.Phone, BasicInfo.Email, BasicInfo.Url, time.Now())
+		BasicInfo.Name, BasicInfo.Address, BasicInfo.Department, BasicInfo.Phone, BasicInfo.Email, BasicInfo.Url, BasicInfo.CreatedAt)
 	if err != nil {
 		return serializer.Response{
 			Code:  50001,

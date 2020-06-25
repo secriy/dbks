@@ -36,6 +36,7 @@ func (service *AddUserService) Create() serializer.Response {
 		UserName:  service.UserName,
 		Password:  service.Password,
 		Authority: service.Authority,
+		CreatedAt: time.Now(),
 	}
 
 	// 表单验证
@@ -45,7 +46,7 @@ func (service *AddUserService) Create() serializer.Response {
 
 	// 创建用户
 	_, err := database.DB.Exec(`INSERT INTO dbks.user(username,password,authority,create_at )
-		VALUES (?,?,?,?)`, user.UserName, user.Password, user.Authority, time.Now())
+		VALUES (?,?,?,?)`, user.UserName, user.Password, user.Authority, user.CreatedAt)
 	if err != nil {
 		util.Log().Panic("创建用户失败", err)
 	}

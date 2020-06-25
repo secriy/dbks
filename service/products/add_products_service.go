@@ -17,13 +17,14 @@ type AddProductsService struct {
 // Create 产品投稿
 func (service *AddProductsService) Create() serializer.Response {
 	Products := model.Products{
-		Title:   service.Title,
-		Content: service.Content,
+		Title:     service.Title,
+		Content:   service.Content,
+		CreatedAt: time.Now(),
 	}
 
 	// 创建产品
 	_, err := database.DB.Exec(`INSERT INTO dbks.products(title,content,create_at)
-		VALUES (?,?,?)`, Products.Title, Products.Content, time.Now())
+		VALUES (?,?,?)`, Products.Title, Products.Content, Products.CreatedAt)
 	if err != nil {
 		return serializer.Response{
 			Code:  50001,

@@ -17,13 +17,14 @@ type AddNewsService struct {
 // Create 新闻投稿
 func (service *AddNewsService) Create() serializer.Response {
 	News := model.News{
-		Title:   service.Title,
-		Content: service.Content,
+		Title:     service.Title,
+		Content:   service.Content,
+		CreatedAt: time.Now(),
 	}
 
 	// 创建新闻
 	_, err := database.DB.Exec(`INSERT INTO dbks.news(title,content,create_at)
-		VALUES (?,?,?)`, News.Title, News.Content, time.Now())
+		VALUES (?,?,?)`, News.Title, News.Content, News.CreatedAt)
 	if err != nil {
 		return serializer.Response{
 			Code:  50001,
