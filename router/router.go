@@ -32,6 +32,7 @@ func NewRouter() *gin.Engine {
 		}
 		// 管理员权限接口
 		admin := r.Group("")
+		admin.Use(middleware.AuthRequired())
 		admin.Use(middleware.AdminRequired())
 		{
 			// 用户CRUD
