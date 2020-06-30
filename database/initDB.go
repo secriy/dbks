@@ -108,7 +108,7 @@ func defaultAdmin() {
 	// 不存在则创建默认管理员
 	if username == "" {
 		_, err := DB.Exec(`INSERT INTO dbks.user(username,password,authority,create_at )
-		VALUES (?,?,?,?)`, os.Getenv("ADMIN"), os.Getenv("ADMIN_PASSWORD"), 0, time.Now())
+		VALUES (?,?,?,?)`, os.Getenv("ADMIN"), os.Getenv("ADMIN_PASSWORD"), 1, time.Now())
 		if err != nil {
 			util.Log().Panic("创建默认管理员失败", err)
 		}

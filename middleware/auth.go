@@ -44,7 +44,7 @@ func AdminRequired() gin.HandlerFunc {
 		uid := session.Get("id")
 		if uid != nil {
 			user, _ := model.GetUser(uid)
-			if user.Authority == 0 {
+			if user.Authority == 1 {
 				c.Next()
 				return
 			}

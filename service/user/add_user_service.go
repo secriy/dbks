@@ -45,8 +45,13 @@ func (service *AddUserService) Create() serializer.Response {
 	}
 
 	// 创建用户
-	_, err := database.DB.Exec(`INSERT INTO dbks.user(username,password,authority,create_at )
+	res, err := database.DB.Exec(`INSERT INTO dbks.user(username,password,authority,create_at )
 		VALUES (?,?,?,?)`, user.UserName, user.Password, user.Authority, user.CreatedAt)
+	if res != nil {
+		tmp, _ := res.LastInsertId()
+		user.ID = uint64(tmp)
+	}
+
 	if err != nil {
 		util.Log().Panic("创建用户失败", err)
 	}
