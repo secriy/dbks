@@ -29,6 +29,7 @@ func NewRouter() *gin.Engine {
 		{
 			login.GET("user/me", api.UserMe)
 			login.DELETE("user/logout", api.UserLogout)
+			login.PUT("user/pass", api.ChangePass)
 		}
 		// 管理员权限接口
 		admin := r.Group("")

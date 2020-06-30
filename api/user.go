@@ -36,6 +36,17 @@ func UserMe(c *gin.Context) {
 	c.JSON(200, res)
 }
 
+// ChangePass 修改密码
+func ChangePass(c *gin.Context) {
+	changePassService := user.ChangePassService{}
+	if err := c.ShouldBind(&changePassService); err == nil {
+		res := changePassService.Change(c)
+		c.JSON(200, res)
+	} else {
+		c.JSON(200, ErrorResponse(err))
+	}
+}
+
 // UserAdd 用户创建接口
 func UserAdd(c *gin.Context) {
 	var registerService user.AddUserService

@@ -1,6 +1,7 @@
 package user
 
 import (
+	"fmt"
 	"time"
 
 	"server/database"
@@ -26,7 +27,12 @@ func (service *AddUserService) valid() *serializer.Response {
 			Msg:  "用户名已被占用",
 		}
 	}
-
+	if service.Authority > 127 {
+		return &serializer.Response{
+			Code: 40007,
+			Msg:  "Authority只能为小于128的正整数",
+		}
+	}
 	return nil
 }
 
@@ -45,6 +51,7 @@ func (service *AddUserService) Create() serializer.Response {
 	}
 
 	// 创建用户
+	fmt.Println("数字：" + string(service.Authority))
 	res, err := database.DB.Exec(`INSERT INTO dbks.user(username,password,authority,create_at )
 		VALUES (?,?,?,?)`, user.UserName, user.Password, user.Authority, user.CreatedAt)
 	if res != nil {

@@ -10,8 +10,8 @@ import (
 
 // LoginService 管理用户登录的服务
 type LoginService struct {
-	UserName string `form:"user_name" json:"user_name" binding:"required,min=2,max=30"`
-	Password string `form:"password" json:"password" binding:"required,min=8,max=40"`
+	UserName string `form:"user_name" json:"user_name" binding:"required,min=2,max=10"`
+	Password string `form:"password" json:"password" binding:"required,min=6,max=16"`
 }
 
 // setSession 设置session
