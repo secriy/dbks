@@ -47,6 +47,7 @@
 - 普通用户权限接口
 	- GET    /api/user/me — 查询用户个人资料
 	- DELETE /api/user/logout — 用户登出
+	- PUT    /api/user/pass — 修改密码
 - 管理员权限接口
 	- GET    /api/user/all — 查询所有用户
 	- POST   /api/user/add — 增加用户
@@ -61,7 +62,6 @@
 	- POST   /api/products/add — 增加产品信息
 	- DELETE /api/products/del/:id — 删除产品信息
 	- PUT    /api/products/update/:id — 更新产品信息
-	- POST   /api/info/add — 增加企业信息
 	- DELETE /api/info/del/:option — 删除企业信息
 	- PUT    /api/info/update — 更新产品信息
 
