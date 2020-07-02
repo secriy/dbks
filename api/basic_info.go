@@ -5,17 +5,6 @@ import (
 	"server/service/basic_info"
 )
 
-// CreateBasicInfo 基础数据投稿
-func CreateBasicInfo(c *gin.Context) {
-	createBasicInfoService := basic_info.AddBasicInfoService{}
-	if err := c.ShouldBind(&createBasicInfoService); err == nil {
-		res := createBasicInfoService.Create()
-		c.JSON(200, res)
-	} else {
-		c.JSON(200, ErrorResponse(err))
-	}
-}
-
 // ListBasicInfo 基础数据列表接口
 func ListBasicInfo(c *gin.Context) {
 	listArticleService := basic_info.ListBasicInfoService{}

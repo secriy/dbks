@@ -11,7 +11,7 @@ import (
 
 // ChangePassService 密码更新服务
 type ChangePassService struct {
-	OldPass  string `form:"old_pass" json:"old_pass" binding:"required,min=6,max=16"`
+	OldPass  string `form:"old_pass" json:"old_pass" binding:"required"`
 	Password string `form:"password" json:"password" binding:"required,min=6,max=16"`
 }
 

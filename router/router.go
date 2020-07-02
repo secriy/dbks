@@ -54,7 +54,6 @@ func NewRouter() *gin.Engine {
 			admin.DELETE("products/del/:id", api.DeleteProducts)
 			admin.PUT("products/update/:id", api.UpdateProducts)
 			// 基础数据CRUD
-			admin.POST("info/add", api.CreateBasicInfo)
 			admin.DELETE("info/del/:option", api.DeleteBasicInfo)
 			admin.PUT("info/update", api.UpdateBasicInfo)
 		}
