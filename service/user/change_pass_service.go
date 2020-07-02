@@ -27,20 +27,11 @@ func CurrentUser(c *gin.Context) *model.User {
 
 // Change 密码更新
 func (service *ChangePassService) Change(c *gin.Context) serializer.Response {
-	var count = 0
 	var old string
 	var createAt time.Time
 
 	userC := model.User{
 		ID: CurrentUser(c).ID,
-	}
-
-	_ = database.DB.QueryRow(`SELECT COUNT(*) FROM user WHERE id = ?`, userC.ID).Scan(&count)
-	if count == 0 {
-		return serializer.Response{
-			Code: 404,
-			Msg:  "用户不存在",
-		}
 	}
 
 	_ = database.DB.QueryRow(`SELECT password,create_at FROM user WHERE id = ?`, userC.ID).Scan(&old, &createAt)

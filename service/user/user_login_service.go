@@ -33,7 +33,7 @@ func (service *LoginService) Login(c *gin.Context) serializer.Response {
 		return serializer.ParamErr("用户名或密码错误", nil)
 	}
 	if user.Password != service.Password {
-		return serializer.ParamErr("密码错误", nil)
+		return serializer.ParamErr("用户名或密码错误", nil)
 	}
 	// 设置session
 	service.setSession(c, user)

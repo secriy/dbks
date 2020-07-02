@@ -1,7 +1,6 @@
 package user
 
 import (
-	"fmt"
 	"time"
 
 	"server/database"
@@ -51,7 +50,6 @@ func (service *AddUserService) Create() serializer.Response {
 	}
 
 	// 创建用户
-	fmt.Println("数字：" + string(service.Authority))
 	res, err := database.DB.Exec(`INSERT INTO dbks.user(username,password,authority,create_at )
 		VALUES (?,?,?,?)`, user.UserName, user.Password, user.Authority, user.CreatedAt)
 	if res != nil {
