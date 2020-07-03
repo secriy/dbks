@@ -79,9 +79,11 @@
 	D:\Environment\Go\bin	// 程序安装位置
 	```
 
-3. 执行`go build`，进行编译
+3. 在项目目录下执行`go build`，进行编译
 
 ## 运行
 
 1. 创建数据库dbks（utf-8）
-2. 在命令行下cd到项目目录，执行`./server.exe`
+2. 将文件`.env.example`重命名为`.env`（无后缀）
+3. 修改`.env`文件中的环境变量，按照本机配置设置好数据库连接密码
+4. 在命令行下cd到项目目录，执行`./server.exe`
