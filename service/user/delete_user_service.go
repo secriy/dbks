@@ -19,6 +19,12 @@ func (service *DeleteUserService) Delete(id string) serializer.Response {
 			Msg:  "用户不存在",
 		}
 	}
+	if id == "1" {
+		return serializer.Response{
+			Code: 50003,
+			Msg:  "默认管理员不允许删除",
+		}
+	}
 	_, err := database.DB.Exec(`DELETE FROM user WHERE id = ?`, id)
 	if err != nil {
 		return serializer.Response{
