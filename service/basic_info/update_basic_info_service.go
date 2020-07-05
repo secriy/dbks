@@ -10,12 +10,12 @@ import (
 
 // AddBasicInfoService 基础数据投稿服务
 type AddBasicInfoService struct {
-	Name       string `form:"name" json:"name" binding:"required,min=1,max=20"`
-	Address    string `form:"address" json:"address" binding:"required"`
-	Department string `form:"department" json:"department" binding:"required"`
-	Phone      string `form:"phone" json:"phone" binding:"required"`
-	Email      string `form:"email" json:"email" binding:"required"`
-	Url        string `form:"url" json:"url" binding:"required"`
+	Name       string `form:"name" json:"name"`
+	Address    string `form:"address" json:"address"`
+	Department string `form:"department" json:"department"`
+	Phone      string `form:"phone" json:"phone" `
+	Email      string `form:"email" json:"email"`
+	Url        string `form:"url" json:"url"`
 }
 
 // Create 基础数据投稿
