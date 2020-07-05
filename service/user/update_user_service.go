@@ -35,6 +35,12 @@ func (service *UpdateUserService) Update(id string) serializer.Response {
 			Msg:  "用户不存在",
 		}
 	}
+	if id == "1" && service.Authority != 1 {
+		return serializer.Response{
+			Code: 50003,
+			Msg:  "默认管理员权限不允许更改",
+		}
+	}
 	userC.UserName = service.UserName
 	userC.Password = service.Password
 	userC.Authority = service.Authority
