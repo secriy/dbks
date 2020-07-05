@@ -60,39 +60,42 @@ func createDB() {
 
 	// 新闻表
 	_, err = DB.Exec(`
-			CREATE TABLE IF NOT EXISTS news(
+		CREATE TABLE IF NOT EXISTS news(
+			INDEX idx_title(title),
 			id MEDIUMINT(8) UNSIGNED  AUTO_INCREMENT,
-			title VARCHAR(20) NOT NULL,
-			content VARCHAR(255) NOT NULL ,
+			title VARCHAR(20) NOT NULL UNIQUE,
+			content VARCHAR(255) NOT NULL,
 			create_at TIMESTAMP NOT NULL,
 			PRIMARY KEY(id)
-			);`)
+		);`)
 	if err != nil {
 		util.Log().Panic("创建新闻表失败", err)
 	}
 
 	// 产品宣传表
 	_, err = DB.Exec(`
-			CREATE TABLE IF NOT EXISTS products(
+		CREATE TABLE IF NOT EXISTS products(
+			INDEX idx_title(title),
 			id MEDIUMINT(8) UNSIGNED  AUTO_INCREMENT,
-			title VARCHAR(20) NOT NULL,
+			title VARCHAR(20) NOT NULL UNIQUE,
 			content VARCHAR(255) NOT NULL ,
 			create_at TIMESTAMP NOT NULL,
 			PRIMARY KEY(id)
-			);`)
+		);`)
 	if err != nil {
 		util.Log().Panic("创建产品宣传表失败", err)
 	}
 
 	// 企业招聘表
 	_, err = DB.Exec(`
-			CREATE TABLE IF NOT EXISTS offers(
+		CREATE TABLE IF NOT EXISTS offers(
+			INDEX idx_title(title),
 			id MEDIUMINT(8) UNSIGNED  AUTO_INCREMENT,
 			title VARCHAR(255) NOT NULL,
 			content VARCHAR(255) NOT NULL ,
 			create_at TIMESTAMP NOT NULL,
 			PRIMARY KEY(id)
-			);`)
+		);`)
 	if err != nil {
 		util.Log().Panic("创建企业招聘表失败", err)
 	}
