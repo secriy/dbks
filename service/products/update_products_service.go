@@ -8,7 +8,7 @@ import (
 
 // UpdateProductsService 产品更新服务
 type UpdateProductsService struct {
-	Title   string `form:"title" json:"title" binding:"required,min=1,max=30"`
+	Title   string `form:"title" json:"title" binding:"required,min=1,max=20"`
 	Content string `form:"content" json:"content" binding:"required"`
 }
 

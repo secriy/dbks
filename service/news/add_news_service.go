@@ -10,7 +10,7 @@ import (
 
 // AddNewsService 新闻投稿服务
 type AddNewsService struct {
-	Title   string `form:"title" json:"title" binding:"required,min=1,max=30"`
+	Title   string `form:"title" json:"title" binding:"required,min=1,max=20"`
 	Content string `form:"content" json:"content" binding:"required"`
 }
 

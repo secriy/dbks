@@ -10,7 +10,7 @@ import (
 
 // AddOffersService 招聘投稿服务
 type AddOffersService struct {
-	Title   string `form:"title" json:"title" binding:"required,min=1,max=30"`
+	Title   string `form:"title" json:"title" binding:"required,min=1,max=20"`
 	Content string `form:"content" json:"content" binding:"required"`
 }
 
