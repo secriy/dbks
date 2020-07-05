@@ -15,19 +15,42 @@ var DB *sql.DB
 // 初始化数据库
 func InitDB(dbConf string) {
 	var err error
-	DB, err = sql.Open("mysql", dbConf)
+	var count = 0
+	DB, err = sql.Open("mysql", dbConf+"?charset=utf8&parseTime=True&loc=Local")
 	if err != nil {
 		log.Panicln("Err:", err.Error())
 	}
 	DB.SetMaxOpenConns(10)
 	DB.SetMaxIdleConns(10)
-
-	createDB()
+	// 判断数据库是否存在
+	_ = DB.QueryRow("SELECT count(SCHEMA_NAME) as SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME='dbks'").Scan(&count)
+	if count == 0 {
+		createDB()
+	}
+	userDB()
+	createTable()
 	defaultAdmin()
 }
 
-// 创建表
+// 创建数据库
 func createDB() {
+	_, err := DB.Exec("CREATE DATABASE dbks")
+	if err != nil {
+		util.Log().Panic("创建数据库失败", err)
+	}
+
+}
+
+// 切换到数据库
+func userDB() {
+	_, err := DB.Exec("USE dbks")
+	if err != nil {
+		util.Log().Panic("切换到数据库失败", err)
+	}
+}
+
+// 创建表
+func createTable() {
 	// 用户表
 	_, err := DB.Exec(`
 		CREATE TABLE IF NOT EXISTS user(
@@ -63,7 +86,7 @@ func createDB() {
 		CREATE TABLE IF NOT EXISTS news(
 			INDEX idx_title(title),
 			id MEDIUMINT(8) UNSIGNED  AUTO_INCREMENT,
-			title VARCHAR(20) NOT NULL UNIQUE,
+			title VARCHAR(20) NOT NULL,
 			content VARCHAR(255) NOT NULL,
 			create_at TIMESTAMP NOT NULL,
 			PRIMARY KEY(id)
@@ -77,7 +100,7 @@ func createDB() {
 		CREATE TABLE IF NOT EXISTS products(
 			INDEX idx_title(title),
 			id MEDIUMINT(8) UNSIGNED  AUTO_INCREMENT,
-			title VARCHAR(20) NOT NULL UNIQUE,
+			title VARCHAR(20) NOT NULL,
 			content VARCHAR(255) NOT NULL ,
 			create_at TIMESTAMP NOT NULL,
 			PRIMARY KEY(id)
