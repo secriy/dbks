@@ -49,6 +49,15 @@ func (service *AddUserService) Create() serializer.Response {
 		return *err
 	}
 
+	// 加密密码
+	if err := user.SetPassword(service.Password); err != nil {
+		return serializer.Err(
+			serializer.CodeEncryptError,
+			"密码加密失败",
+			err,
+		)
+	}
+
 	// 创建用户
 	res, err := database.DB.Exec(`INSERT INTO dbks.user(username,password,authority,create_at )
 		VALUES (?,?,?,?)`, user.UserName, user.Password, user.Authority, user.CreatedAt)

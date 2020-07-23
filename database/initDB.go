@@ -27,7 +27,7 @@ func InitDB(dbConf string) {
 	if count == 0 {
 		createDB()
 	}
-	userDB()
+	useDB()
 	createTable()
 	defaultAdmin()
 }
@@ -38,11 +38,10 @@ func createDB() {
 	if err != nil {
 		util.Log().Panic("创建数据库失败", err)
 	}
-
 }
 
 // 切换到数据库
-func userDB() {
+func useDB() {
 	_, err := DB.Exec("USE dbks")
 	if err != nil {
 		util.Log().Panic("切换到数据库失败", err)
@@ -56,7 +55,7 @@ func createTable() {
 		CREATE TABLE IF NOT EXISTS user(
 			id MEDIUMINT(8) UNSIGNED  AUTO_INCREMENT,
 			username VARCHAR(20) NOT NULL UNIQUE,
-			password VARCHAR(20) NOT NULL,
+			password VARCHAR(200) NOT NULL,
 			authority TINYINT NOT NULL,
 			create_at TIMESTAMP NOT NULL,
 			PRIMARY KEY(id)

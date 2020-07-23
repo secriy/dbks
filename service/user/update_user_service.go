@@ -41,14 +41,21 @@ func (service *UpdateUserService) Update(id string) serializer.Response {
 			Msg:  "默认管理员权限不允许更改",
 		}
 	}
-	userC.UserName = service.UserName
-	userC.Password = service.Password
-	userC.Authority = service.Authority
+
+	// 加密密码
+	if err := userC.SetPassword(service.Password); err != nil {
+		return serializer.Err(
+			serializer.CodeEncryptError,
+			"密码加密失败",
+			err,
+		)
+	}
+
 	userC.CreatedAt = createAt
 
 	_, err := database.DB.Exec(`
 				UPDATE user SET username = ?, password = ?, authority=?
-				WHERE id = ?`, service.UserName, service.Password, service.Authority, id)
+				WHERE id = ?`, userC.UserName, userC.Password, userC.Authority, id)
 	if err != nil {
 		return serializer.Response{
 			Code:  50003,
