@@ -27,7 +27,6 @@ func CurrentUser(c *gin.Context) *model.User {
 
 // Change 密码更新
 func (service *ChangePassService) Change(c *gin.Context) serializer.Response {
-	var old string
 	var createAt time.Time
 
 	userC := model.User{
@@ -35,8 +34,10 @@ func (service *ChangePassService) Change(c *gin.Context) serializer.Response {
 	}
 
 	// 判断原密码是否正确
-	_ = database.DB.QueryRow(`SELECT password,create_at FROM user WHERE id = ?`, userC.ID).Scan(&old, &createAt)
-	if old != service.OldPass {
+	_ = database.DB.QueryRow(`SELECT password,create_at FROM user WHERE id = ?`, userC.ID).Scan(&userC.Password, &createAt)
+
+	// 验证密码
+	if userC.CheckPassword(service.OldPass) == false {
 		return serializer.Response{
 			Code: 50009,
 			Msg:  "原密码错误",
@@ -58,7 +59,7 @@ func (service *ChangePassService) Change(c *gin.Context) serializer.Response {
 	// 更新密码
 	_, err := database.DB.Exec(`
 				UPDATE user SET password = ?
-				WHERE id = ?`, service.Password, userC.ID)
+				WHERE id = ?`, userC.Password, userC.ID)
 	if err != nil {
 		return serializer.Response{
 			Code:  50003,
