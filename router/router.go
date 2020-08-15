@@ -41,6 +41,7 @@ func NewRouter() *gin.Engine {
 			admin.POST("user/add", api.UserAdd)
 			admin.DELETE("user/del/:id", api.UserDelete)
 			admin.PUT("user/update/:id", api.UserUpdate)
+			admin.PUT("user/reset/:id", api.ResrtPass)
 			// 新闻CRUD
 			admin.POST("news/add", api.CreateNews)
 			admin.DELETE("news/del/:id", api.DeleteNews)

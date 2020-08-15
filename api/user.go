@@ -47,6 +47,17 @@ func ChangePass(c *gin.Context) {
 	}
 }
 
+// ResrtPass 重置密码
+func ResrtPass(c *gin.Context) {
+	resetPassService := user.ResetPassService{}
+	if err := c.ShouldBind(&resetPassService); err == nil {
+		res := resetPassService.Reset(c.Param("id"))
+		c.JSON(200, res)
+	} else {
+		c.JSON(200, ErrorResponse(err))
+	}
+}
+
 // UserAdd 用户创建接口
 func UserAdd(c *gin.Context) {
 	var registerService user.AddUserService
