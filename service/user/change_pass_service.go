@@ -34,6 +34,7 @@ func (service *ChangePassService) Change(c *gin.Context) serializer.Response {
 		ID: CurrentUser(c).ID,
 	}
 
+	// 判断原密码是否正确
 	_ = database.DB.QueryRow(`SELECT password,create_at FROM user WHERE id = ?`, userC.ID).Scan(&old, &createAt)
 	if old != service.OldPass {
 		return serializer.Response{
@@ -42,9 +43,19 @@ func (service *ChangePassService) Change(c *gin.Context) serializer.Response {
 		}
 	}
 
-	userC.Password = service.Password
+	// 加密密码
+	if err := userC.SetPassword(service.Password); err != nil {
+		return serializer.Err(
+			serializer.CodeEncryptError,
+			"密码加密失败",
+			err,
+		)
+	}
+
+	// 时间戳
 	userC.CreatedAt = createAt
 
+	// 更新密码
 	_, err := database.DB.Exec(`
 				UPDATE user SET password = ?
 				WHERE id = ?`, service.Password, userC.ID)

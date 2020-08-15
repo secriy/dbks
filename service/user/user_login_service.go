@@ -29,17 +29,15 @@ func (service *LoginService) Login(c *gin.Context) serializer.Response {
 
 	_ = database.DB.QueryRow(`SELECT  COUNT(username) FROM user WHERE username = ?`, service.UserName).Scan(&count)
 	_ = database.DB.QueryRow(`SELECT * FROM user WHERE username = ?`, service.UserName).Scan(&user.ID, &user.UserName, &user.Password, &user.Authority, &user.CreatedAt)
+
+	// 用户名错误
 	if count == 0 {
 		return serializer.ParamErr("用户名或密码错误", nil)
 	}
-	if user.ID != 1 {
-		if user.CheckPassword(service.Password) == false {
-			return serializer.ParamErr("用户名或密码错误", nil)
-		}
-	} else {
-		if user.Password != service.Password {
-			return serializer.ParamErr("用户名或密码错误", nil)
-		}
+
+	// 验证密码
+	if user.CheckPassword(service.Password) == false {
+		return serializer.ParamErr("用户名或密码错误", nil)
 	}
 
 	// 设置session

@@ -7,6 +7,7 @@ import (
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
+	"golang.org/x/crypto/bcrypt"
 	"server/util"
 )
 
@@ -29,7 +30,10 @@ func InitDB(dbConf string) {
 	}
 	useDB()
 	createTable()
-	defaultAdmin()
+	err = defaultAdmin()
+	if err != nil {
+		log.Panicln("Err:", err.Error())
+	}
 }
 
 // 创建数据库
@@ -124,19 +128,25 @@ func createTable() {
 }
 
 // 创建默认管理员
-func defaultAdmin() {
+func defaultAdmin() error {
 	// 查询是否已经存在默认管理员
 	var username string
 	row := DB.QueryRow(`
 			SELECT username FROM user WHERE username = ?;`, "admin")
 	_ = row.Scan(&username)
 	// 不存在则创建默认管理员
+	// 密码加密
+	bytes, err := bcrypt.GenerateFromPassword([]byte(os.Getenv("ADMIN_PASSWORD")), 11)
+	if err != nil {
+		return err
+	}
 	if username == "" {
 		_, err := DB.Exec(`INSERT INTO dbks.user(username,password,authority,create_at )
-		VALUES (?,?,?,?)`, os.Getenv("ADMIN"), os.Getenv("ADMIN_PASSWORD"), 1, time.Now())
+		VALUES (?,?,?,?)`, os.Getenv("ADMIN"), string(bytes), 1, time.Now())
 		if err != nil {
 			util.Log().Panic("创建默认管理员失败", err)
 		}
 
 	}
+	return nil
 }
