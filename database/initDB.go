@@ -89,8 +89,8 @@ func createTable() {
 		CREATE TABLE IF NOT EXISTS news(
 			INDEX idx_title(title),
 			id MEDIUMINT(8) UNSIGNED  AUTO_INCREMENT,
-			title VARCHAR(20) NOT NULL,
-			content VARCHAR(255) NOT NULL,
+			title VARCHAR(64) NOT NULL,
+			content TEXT NOT NULL,
 			create_at TIMESTAMP NOT NULL,
 			PRIMARY KEY(id)
 		);`)
@@ -103,8 +103,8 @@ func createTable() {
 		CREATE TABLE IF NOT EXISTS products(
 			INDEX idx_title(title),
 			id MEDIUMINT(8) UNSIGNED  AUTO_INCREMENT,
-			title VARCHAR(20) NOT NULL,
-			content VARCHAR(255) NOT NULL ,
+			title VARCHAR(64) NOT NULL,
+			content TEXT NOT NULL,
 			create_at TIMESTAMP NOT NULL,
 			PRIMARY KEY(id)
 		);`)
@@ -117,8 +117,8 @@ func createTable() {
 		CREATE TABLE IF NOT EXISTS offers(
 			INDEX idx_title(title),
 			id MEDIUMINT(8) UNSIGNED  AUTO_INCREMENT,
-			title VARCHAR(255) NOT NULL,
-			content VARCHAR(255) NOT NULL ,
+			title VARCHAR(64) NOT NULL,
+			content TEXT NOT NULL,
 			create_at TIMESTAMP NOT NULL,
 			PRIMARY KEY(id)
 		);`)
