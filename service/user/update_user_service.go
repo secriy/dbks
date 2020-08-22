@@ -1,6 +1,7 @@
 package user
 
 import (
+	"strconv"
 	"time"
 
 	"server/database"
@@ -12,13 +13,12 @@ import (
 // UpdateUserService 用户更新服务
 type UpdateUserService struct {
 	UserName  string `form:"user_name" json:"user_name" binding:"required,min=2,max=10"`
-	Password  string `form:"password" json:"password" binding:"required,min=6,max=16"`
 	Authority uint8  `form:"authority" json:"authority" binding:"required"`
 }
 
 // Update 用户更新
 func (service *UpdateUserService) Update(id string) serializer.Response {
-	var userC model.User
+	var userVar model.User
 	var count = 0
 	var createAt time.Time
 	if service.Authority > 127 {
@@ -42,20 +42,15 @@ func (service *UpdateUserService) Update(id string) serializer.Response {
 		}
 	}
 
-	// 加密密码
-	if err := userC.SetPassword(service.Password); err != nil {
-		return serializer.Err(
-			serializer.CodeEncryptError,
-			"密码加密失败",
-			err,
-		)
-	}
-
-	userC.CreatedAt = createAt
+	intNum, _ := strconv.Atoi(id)
+	userVar.ID = uint64(intNum)
+	userVar.UserName = service.UserName
+	userVar.Authority = service.Authority
+	userVar.CreatedAt = createAt
 
 	_, err := database.DB.Exec(`
-				UPDATE user SET username = ?, password = ?, authority=?
-				WHERE id = ?`, userC.UserName, userC.Password, userC.Authority, id)
+				UPDATE user SET username = ?,  authority=?
+				WHERE id = ?`, userVar.UserName, userVar.Authority, id)
 	if err != nil {
 		return serializer.Response{
 			Code:  50003,
@@ -65,7 +60,7 @@ func (service *UpdateUserService) Update(id string) serializer.Response {
 	}
 
 	return serializer.Response{
-		Data: serializer.BuildUser(userC),
+		Data: serializer.BuildUser(userVar),
 		Msg:  "用户更新成功",
 	}
 }

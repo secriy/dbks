@@ -29,15 +29,15 @@ func CurrentUser(c *gin.Context) *model.User {
 func (service *ChangePassService) Change(c *gin.Context) serializer.Response {
 	var createAt time.Time
 
-	userC := model.User{
+	userVar := model.User{
 		ID: CurrentUser(c).ID,
 	}
 
 	// 判断原密码是否正确
-	_ = database.DB.QueryRow(`SELECT password,create_at FROM user WHERE id = ?`, userC.ID).Scan(&userC.Password, &createAt)
+	_ = database.DB.QueryRow(`SELECT password,create_at FROM user WHERE id = ?`, userVar.ID).Scan(&userVar.Password, &createAt)
 
 	// 验证密码
-	if userC.CheckPassword(service.OldPass) == false {
+	if userVar.CheckPassword(service.OldPass) == false {
 		return serializer.Response{
 			Code: 50009,
 			Msg:  "原密码错误",
@@ -45,7 +45,7 @@ func (service *ChangePassService) Change(c *gin.Context) serializer.Response {
 	}
 
 	// 加密密码
-	if err := userC.SetPassword(service.Password); err != nil {
+	if err := userVar.SetPassword(service.Password); err != nil {
 		return serializer.Err(
 			serializer.CodeEncryptError,
 			"密码加密失败",
@@ -54,12 +54,12 @@ func (service *ChangePassService) Change(c *gin.Context) serializer.Response {
 	}
 
 	// 时间戳
-	userC.CreatedAt = createAt
+	userVar.CreatedAt = createAt
 
 	// 更新密码
 	_, err := database.DB.Exec(`
 				UPDATE user SET password = ?
-				WHERE id = ?`, userC.Password, userC.ID)
+				WHERE id = ?`, userVar.Password, userVar.ID)
 	if err != nil {
 		return serializer.Response{
 			Code:  50003,
@@ -69,7 +69,7 @@ func (service *ChangePassService) Change(c *gin.Context) serializer.Response {
 	}
 
 	return serializer.Response{
-		Data: serializer.BuildUser(userC),
+		Data: serializer.BuildUser(userVar),
 		Msg:  "密码更新成功",
 	}
 }

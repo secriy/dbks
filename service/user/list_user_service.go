@@ -14,7 +14,7 @@ type ListUsersService struct {
 
 // List 用户列表
 func (service *ListUsersService) List() serializer.Response {
-	var userC model.User
+	var userVar model.User
 	var users []model.User
 
 	rows, err := database.DB.Query(`SELECT * FROM user ORDER BY id`)
@@ -33,6 +33,7 @@ func (service *ListUsersService) List() serializer.Response {
 			authority uint8
 			createdAt time.Time
 		)
+
 		err = rows.Scan(&id, &userName, &password, &authority, &createdAt)
 		if err != nil {
 			return serializer.Response{
@@ -41,13 +42,12 @@ func (service *ListUsersService) List() serializer.Response {
 				Error: err.Error(),
 			}
 		}
-		userC.ID = id
-		userC.UserName = userName
-		userC.Password = password
-		userC.Authority = authority
-		userC.CreatedAt = createdAt
+		userVar.ID = id
+		userVar.UserName = userName
+		userVar.Authority = authority
+		userVar.CreatedAt = createdAt
 
-		users = append(users, userC)
+		users = append(users, userVar)
 	}
 
 	return serializer.Response{

@@ -12,7 +12,7 @@ type ResetPassService struct {
 }
 
 type DefaultPass struct {
-	Password string
+	Password string `json:"password"`
 }
 
 func (service *ResetPassService) Reset(id string) serializer.Response {

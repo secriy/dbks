@@ -8,7 +8,6 @@ import (
 type User struct {
 	ID        uint64 `json:"uid"`
 	UserName  string `json:"user_name"`
-	Password  string `json:"password"`
 	Authority uint8  `json:"authority"`
 	CreatedAt int64  `json:"created_at"`
 }
@@ -18,7 +17,6 @@ func BuildUser(user model.User) User {
 	return User{
 		ID:        user.ID,
 		UserName:  user.UserName,
-		Password:  user.Password,
 		Authority: user.Authority,
 		CreatedAt: user.CreatedAt.Unix(),
 	}
