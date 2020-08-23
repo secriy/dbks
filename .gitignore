@@ -2,4 +2,3 @@
 .vscode
 server.exe
 .env
-*.bat
